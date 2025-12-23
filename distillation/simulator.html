@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+        <meta charset="UTF-8">
+        <title>Distillation Column Simulator</title>
+        <link rel="stylesheet" href="simulator.css">
+        <script defer src="column.js"></script>
+        <script defer src="app.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Distillation Column Simulator</h1>
+        </div>
+        <main class="app">
+            <div class="panel inputs">
+                <form class="input-form" id="input-form">
+                    <h2>User Inputs</h2>
+                    <fieldset class="input-section">
+                        <legend>Column Parameters</legend>
+                        <div class="input-group">
+                            <label for="columnPressure">Column Pressure</label>
+                            <input type="number" id="columnPressure" min="-14.0" value="100" required>
+                            <span class="units">psig</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="totalTrays">Number of trays</label>
+                            <input type="number" id="totalTrays" min="0" value="6" step="1" required>
+                            <span class="units"></span>
+                        </div>
+                        <div class="input-group">
+                            <label for="feedTray">Feed tray</label>
+                            <input type="number" id="feedTray" min="1" value="4" step="1" required>
+                            <span class="units"></span>
+                        </div>
+                    </fieldset>
+                    <fieldset class="input-section">
+                        <legend>Feed Parameters</legend>
+                        <div class="input-group">
+                            <label for="feedRate">Feed Rate</label>
+                            <input type="number" id="feedRate" min="10" value="1000" step="10" required>
+                            <span class="units">lb/hr</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="feedComposition">Feed Composition</label>
+                            <input type="number" id="feedComposition" min="1" max="100" step="1" value="50" required>
+                            <span class="units">mol% Propane</span>
+                        </div>
+                    </fieldset>
+                    <fieldset class="input-section">
+                        <legend>Product Parameters</legend>
+                        <div class="input-group">
+                            <label for="distillateComposition">Distillate Composition</label>
+                            <input type="number" id="distillateComposition" min="1" max="100" step="1" value="95" required>
+                            <span class="units">mol% Propane</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="bottomsComposition">Bottoms Composition</label>
+                            <input type="number" id="bottomsComposition" min="1" max="100" step="1" value="5" required>
+                            <span class="units">mol% Propane</span>
+                        </div>
+                    </fieldset>
+                </form>
+                <ul class="input-messages">
+                    <li class="msg" id="totalTrays-msg"></li>
+                    <li class="msg" id="feedTray-msg"></li>
+                    <li class="msg" id="feedComposition-msg"></li>
+                    <li class="msg" id="distillateComposition-msg"></li>
+                    <li class="msg" id="bottomsComposition-msg"></li>
+                </ul>
+            </div>
+            <div class="panel feed">
+                <div class="feed-info-box">
+                    <div class="feed-label">FEED CONDITIONS</div>
+                    <div class="product-rates">
+                        <span class="rate-label">Rate:</span>
+                        <span class="rate-value" id="feed-rate"></span>
+                        <span class="rate-units">lb/hr</span>
+
+                        <span class="rate-label">Composition:</span>
+                        <span class="rate-value" id="feed-composition"></span>
+                        <span class="rate-units">% Propane</span>
+
+                        <span class="rate-label">Temperature:</span>
+                        <span class="rate-value" id="feed-temp"></span>
+                        <span class="rate-units">°F</span>
+                    </div>
+                </div>
+                <div class="feed-arrow-line">→</div>
+            </div>
+            <div class="panel column">
+                <div id="column">
+                </div>
+            </div>
+            <div class="panel outputs">
+                <div class="equipment" data-stage="condenser">
+                    <h4 class="title">Condenser</h4>
+                    <div class="data-header">
+                        <div class="data-column">Vap In</div>
+                        <div class="data-column">Liq Out</div>
+                        <div class="data-column">T</div>
+                    </div>
+                    <div class="data-row">
+                        <div class="data-column">
+                            <div class="value-bar-container">
+                                <span class="y"></span>
+                                <div class="composition-bar"><div class="composition-fill y-bar"></div></div>
+                            </div>
+                        </div>
+                        <div class="data-column">
+                            <div class="value-bar-container">
+                                <span class="x"></span>
+                                <div class="composition-bar"><div class="composition-fill x-bar"></div></div>
+                            </div>
+                        </div>
+                        <div class="data-column">
+                            <span class="T"></span><span class="degree"> &deg;F</span>
+                        </div>
+                    </div>
+                    <div class="duty-info" data-type="condenser">
+                        <span class="duty-label">Heat Duty:</span>
+                        <span class="duty-value"></span>
+                        <span class="duty-units">kBTU/hr</span>
+                    </div>
+                </div>
+                <div class="product-section">
+                    <div class="product-label">FLOW RATES</div>
+                    <div class="product-rates">
+                        <span class="rate-label">Distillate:</span>
+                        <span class="rate-value" id="dist-rate"></span>
+                        <span class="rate-units">lb/hr</span>
+
+                        <span class="rate-label">Bottoms:</span>
+                        <span class="rate-value" id="btms-rate"></span>
+                        <span class="rate-units">lb/hr</span>
+
+                        <span class="rate-label">Reflux:</span>
+                        <span class="rate-value" id="reflux-rate"></span>
+                        <span class="rate-units">lb/hr</span>
+                    </div>
+                </div>
+                <div class="equipment" data-stage="reboiler">
+                    <h4 class="title">Reboiler</h4>
+                    <div class="data-header">
+                        <div class="data-column">Vap Out</div>
+                        <div class="data-column">Liq Out</div>
+                        <div class="data-column">T</div>
+                    </div>
+                    <div class="data-row">
+                        <div class="data-column">
+                            <div class="value-bar-container">
+                                <span class="y"></span>
+                                <div class="composition-bar"><div class="composition-fill y-bar"></div></div>
+                            </div>
+                        </div>
+                        <div class="data-column">
+                            <div class="value-bar-container">
+                                <span class="x"></span>
+                                <div class="composition-bar"><div class="composition-fill x-bar"></div></div>
+                            </div>
+                        </div>
+                        <div class="data-column">
+                            <span class="T"></span><span class="degree"> &deg;F</span>
+                        </div>
+                    </div>
+                    <div class="duty-info" data-type="reboiler">
+                        <span class="duty-label">Heat Duty:</span>
+                        <span class="duty-value"></span>
+                        <span class="duty-units">kBTU/hr</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <template id="tray-template">
+            <div class="tray">
+                <h4 class="title"></h4>
+                <div class="data-header">
+                    <div class="data-column">Vap</div>
+                    <div class="data-column">Liq</div>
+                    <div class="data-column">T</div>
+                </div>
+                <div class="data-row">
+                    <div class="data-column">
+                        <div class="value-bar-container">
+                            <span class="y"></span>
+                            <div class="composition-bar"><div class="composition-fill y-bar"></div></div>
+                        </div>
+                    </div>
+                    <div class="data-column">
+                        <div class="value-bar-container">
+                            <span class="x"></span>
+                            <div class="composition-bar"><div class="composition-fill x-bar"></div></div>
+                        </div>
+                    </div>
+                    <div class="data-column">
+                        <span class="T"></span><span class="degree"> &deg;F</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </body>
+</html>
