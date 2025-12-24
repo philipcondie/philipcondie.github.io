@@ -4,4 +4,4 @@ title: Home
 ---
 
 # Project Demos
-- Simple [Distillation Simulator](/distillation/)
+- [Simple Distillation Simulator](/distillation/)
