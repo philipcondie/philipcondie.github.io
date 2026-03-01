@@ -1,0 +1,61 @@
+body {
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+a {
+    color: #0070f3;
+}
+
+h1 {
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    color: #666;
+    margin-top: 0;
+}
+
+.links {
+    margin: 8px 0 32px;
+}
+
+.links a {
+    margin-right: 16px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 32px 0;
+}
+
+.project {
+    margin-bottom: 24px;
+}
+
+.project h3 {
+    margin-bottom: 4px;
+}
+
+.project h3 a {
+    text-decoration: none;
+}
+
+.project h3 a:hover {
+    text-decoration: underline;
+}
+
+.project p {
+    margin-top: 4px;
+    color: #555;
+}
+
+.tags {
+    font-size: 0.85em;
+    color: #888;
+}
