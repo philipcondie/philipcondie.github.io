@@ -1,3 +1,5 @@
 title: Phil Condie
 # description: Personal Projects
-theme: jekyll-theme-minimal 
+remote_theme: "mmistakes/minimal-mistakes@4.27.3"
+plugins:
+  - jekyll-include-cache
